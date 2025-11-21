@@ -20,7 +20,8 @@ def run_green_light_test():
         [sys.executable, "-m", "unittest", "test_safe_division.py", "-v"],
         cwd=os.path.dirname(os.path.abspath(__file__)),
         capture_output=True,
-        text=True
+        text=True,
+        timeout=30
     )
     
     print(result.stdout)
@@ -71,7 +72,8 @@ def run_red_light_test():
             [sys.executable, "-m", "unittest", "test_safe_division.py", "-v"],
             cwd=script_dir,
             capture_output=True,
-            text=True
+            text=True,
+            timeout=30
         )
         
         print(result.stdout)

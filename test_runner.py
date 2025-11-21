@@ -4,6 +4,7 @@
 """
 
 import os
+import shutil
 import subprocess
 import sys
 
@@ -49,14 +50,12 @@ def run_red_light_test():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     
     # 備份原始文件並替換
-    subprocess.run(
-        ["cp", "safe_division.py", "safe_division_backup.py"],
-        cwd=script_dir
-    )
-    subprocess.run(
-        ["cp", "safe_division_without_handling.py", "safe_division.py"],
-        cwd=script_dir
-    )
+    safe_div = os.path.join(script_dir, "safe_division.py")
+    backup = os.path.join(script_dir, "safe_division_backup.py")
+    no_handling = os.path.join(script_dir, "safe_division_without_handling.py")
+    
+    shutil.copy(safe_div, backup)
+    shutil.copy(no_handling, safe_div)
     
     result = subprocess.run(
         [sys.executable, "-m", "unittest", "test_safe_division.py", "-v"],
@@ -77,14 +76,8 @@ def run_red_light_test():
         print("✅ 結果: 測試通過")
     
     # 恢復原始文件
-    subprocess.run(
-        ["cp", "safe_division_backup.py", "safe_division.py"],
-        cwd=script_dir
-    )
-    subprocess.run(
-        ["rm", "safe_division_backup.py"],
-        cwd=script_dir
-    )
+    shutil.copy(backup, safe_div)
+    os.remove(backup)
     
     print()
     return result.returncode != 0

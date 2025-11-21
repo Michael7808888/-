@@ -27,12 +27,12 @@ class TestSafeDivision(unittest.TestCase):
     def test_float_division(self):
         """測試浮點數相除 - Test division with floating point numbers"""
         self.assertAlmostEqual(safe_division(7.5, 2.5), 3.0)
-        self.assertAlmostEqual(safe_division(1.0, 3.0), 0.3333333333333333)
+        self.assertAlmostEqual(safe_division(1.0, 3.0), 1.0 / 3.0)
     
     def test_boundary_values(self):
         """測試邊界值相除 - Test division with boundary values"""
         self.assertEqual(safe_division(0, 5), 0.0)
-        self.assertAlmostEqual(safe_division(1, 1000000), 0.000001)
+        self.assertAlmostEqual(safe_division(1, 1000000), 1e-6)
         self.assertEqual(safe_division(1000000, 1), 1000000.0)
     
     def test_division_by_zero_raises_error(self):

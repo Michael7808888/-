@@ -14,7 +14,7 @@ def safe_division(a, b):
         b: The divisor (denominator)
     
     Returns:
-        The result of a / b, or None if b is zero
+        The result of a / b as a float
     
     Raises:
         ValueError: If b is zero (with a descriptive error message)

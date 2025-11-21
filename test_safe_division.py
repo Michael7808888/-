@@ -36,7 +36,7 @@ class TestSafeDivision(unittest.TestCase):
     def test_float_division(self):
         """測試浮點數相除"""
         self.assertAlmostEqual(safe_division(10.5, 2.5), 4.2)
-        self.assertAlmostEqual(safe_division(1.0, 3.0), 0.333333, places=5)
+        self.assertAlmostEqual(safe_division(1.0, 3.0), 1.0/3.0, places=5)
     
     def test_boundary_values(self):
         """測試邊界值"""

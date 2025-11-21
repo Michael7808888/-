@@ -49,38 +49,50 @@ def run_red_light_test():
     
     script_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # 備份原始文件並替換
+    # 定義檔案路徑
     safe_div = os.path.join(script_dir, "safe_division.py")
     backup = os.path.join(script_dir, "safe_division_backup.py")
     no_handling = os.path.join(script_dir, "safe_division_without_handling.py")
     
-    shutil.copy(safe_div, backup)
-    shutil.copy(no_handling, safe_div)
+    # 檢查必要檔案是否存在
+    if not os.path.exists(safe_div):
+        print("❌ 錯誤: safe_division.py 不存在")
+        return False
+    if not os.path.exists(no_handling):
+        print("❌ 錯誤: safe_division_without_handling.py 不存在")
+        return False
     
-    result = subprocess.run(
-        [sys.executable, "-m", "unittest", "test_safe_division.py", "-v"],
-        cwd=script_dir,
-        capture_output=True,
-        text=True
-    )
-    
-    print(result.stdout)
-    if result.stderr:
-        print(result.stderr)
-    
-    print()
-    if result.returncode != 0:
-        print("❌ 結果: 測試失敗（紅燈）")
-        print("說明: 除以零的測試失敗，因為程式直接丟出 ZeroDivisionError，未被妥善處理")
-    else:
-        print("✅ 結果: 測試通過")
-    
-    # 恢復原始文件
-    shutil.copy(backup, safe_div)
-    os.remove(backup)
-    
-    print()
-    return result.returncode != 0
+    try:
+        # 備份原始文件並替換
+        shutil.copy(safe_div, backup)
+        shutil.copy(no_handling, safe_div)
+        
+        result = subprocess.run(
+            [sys.executable, "-m", "unittest", "test_safe_division.py", "-v"],
+            cwd=script_dir,
+            capture_output=True,
+            text=True
+        )
+        
+        print(result.stdout)
+        if result.stderr:
+            print(result.stderr)
+        
+        print()
+        if result.returncode != 0:
+            print("❌ 結果: 測試失敗（紅燈）")
+            print("說明: 除以零的測試失敗，因為程式直接丟出 ZeroDivisionError，未被妥善處理")
+        else:
+            print("✅ 結果: 測試通過")
+        
+        print()
+        return result.returncode != 0
+        
+    finally:
+        # 確保總是恢復原始文件
+        if os.path.exists(backup):
+            shutil.copy(backup, safe_div)
+            os.remove(backup)
 
 
 def main():

@@ -3,6 +3,7 @@
 此腳本演示綠燈和紅燈的測試結果
 """
 
+import os
 import subprocess
 import sys
 
@@ -16,7 +17,7 @@ def run_green_light_test():
     
     result = subprocess.run(
         [sys.executable, "-m", "unittest", "test_safe_division.py", "-v"],
-        cwd="/home/runner/work/-/-",
+        cwd=os.path.dirname(os.path.abspath(__file__)),
         capture_output=True,
         text=True
     )
@@ -45,19 +46,21 @@ def run_red_light_test():
     print("將 safe_division.py 替換為無處理版本...")
     print()
     
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
     # 備份原始文件並替換
     subprocess.run(
         ["cp", "safe_division.py", "safe_division_backup.py"],
-        cwd="/home/runner/work/-/-"
+        cwd=script_dir
     )
     subprocess.run(
         ["cp", "safe_division_without_handling.py", "safe_division.py"],
-        cwd="/home/runner/work/-/-"
+        cwd=script_dir
     )
     
     result = subprocess.run(
         [sys.executable, "-m", "unittest", "test_safe_division.py", "-v"],
-        cwd="/home/runner/work/-/-",
+        cwd=script_dir,
         capture_output=True,
         text=True
     )
@@ -76,11 +79,11 @@ def run_red_light_test():
     # 恢復原始文件
     subprocess.run(
         ["cp", "safe_division_backup.py", "safe_division.py"],
-        cwd="/home/runner/work/-/-"
+        cwd=script_dir
     )
     subprocess.run(
         ["rm", "safe_division_backup.py"],
-        cwd="/home/runner/work/-/-"
+        cwd=script_dir
     )
     
     print()
